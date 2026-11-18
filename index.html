@@ -288,7 +288,7 @@ function calc(){
  const mn=(L,M,v)=>L!=null?(pph0?v/pph0*60:0):M,altMin=mn(ST.altL,ST.altM,alt),opMin=opOn?mn(ST.opL,ST.opM,opf):0;
  [["alt",alt],["res",res],["opf",opf],["tot",fl],["altm",altMin],["opm",opMin]].forEach(q=>$(q[0]).value=+q[1].toFixed(1));
  $("opl").textContent=+(opOn?opMin:ST.opM).toFixed(1);$("aml").textContent=+altMin.toFixed(1);$("opm").disabled=$("opf").disabled=!opOn;
- {const m=pph0?Math.round((tx+fu+opf)/pph0*60):0;$("en").innerHTML=pph0?`<small style="color:var(--mu)">Total Usable Fuel - Taxi Fuel </small><br><b style="font-size:18px">${Math.floor(m/60)} ชม. ${m%60} นาที</b> <span style="color:var(--mu)">(${m} นาที)</span>`:""}
+ {const m=pph0?Math.round(Math.max(0,fl-tx)/pph0*60):0;$("en").innerHTML=pph0?`<small style="color:var(--mu)">Total Usable Fuel − Taxi Fuel</small><br><b style="font-size:18px">${Math.floor(m/60)} ชม. ${m%60} นาที</b> <span style="color:var(--mu)">(${m} นาที)</span>`:""}
  const aU=armF(fl),toF=Math.max(0,fl-tx),ldF=toF-used,fM=fl*aU/1000,tM=tx*aU/1000,uM=used*aU/1000,toM=fM-tM,ldM=toM-uM;
  const rW=zW+fl,rM=zM+fM,tW=rW-tx,tMo=zM+toM,lW=tW-used,lM=zM+ldM;
  $("fgal").textContent=fl>0?`เชื้อเพลิงทั้งหมด ≈ ${(fl/6.7).toFixed(1)} US gal · Arm Usable fuel ${f2(aU)} in (ตาราง POH Fig 6-15) · Taxi และเชื้อเพลิงที่ใช้ไปคำนวณด้วย Arm นี้`:"";
