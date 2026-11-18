@@ -17,41 +17,55 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f4f6f9;--card:#fff;--tx:#17202b;--mu:#64707f;--bd:#dde3ea;--ac:#0b5ed7;--ok:#13795b;--okb:#e1f4ec;--bad:#b42318;--badb:#fde8e6;--in:#f0f4fa;box-sizing:border-box}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f141a;--card:#18202a;--tx:#e8edf3;--mu:#97a3b1;--bd:#2a3542;--ac:#6ea8fe;--ok:#4cd2a0;--okb:#12352b;--bad:#ff8a80;--badb:#3d1a17;--in:#202b38;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#0f141a;--card:#18202a;--tx:#e8edf3;--mu:#97a3b1;--bd:#2a3542;--ac:#6ea8fe;--ok:#4cd2a0;--okb:#12352b;--bad:#ff8a80;--badb:#3d1a17;--in:#202b38;color-scheme:dark}
-html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%;text-size-adjust:100%}
+:root{
+ --bg:#f4f6f9;--card:#fff;--tx:#17202b;--mu:#64707f;--bd:#dde3ea;--ac:#0b5ed7;--on-ac:#fff;--ok:#13795b;--okb:#e1f4ec;--bad:#b42318;--badb:#fde8e6;--in:#f0f4fa;
+ --c-zfw:#8a94a3;--c-ramp:#0b5ed7;--c-to:#e08a00;--c-ldg:#13a37f;--ring:#0b5ed7;
+ box-sizing:border-box;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme]){
+ --bg:#0f141a;--card:#18202a;--tx:#e8edf3;--mu:#97a3b1;--bd:#2a3542;--ac:#6ea8fe;--on-ac:#08111c;--ok:#4cd2a0;--okb:#12352b;--bad:#ff8a80;--badb:#3d1a17;--in:#202b38;
+ --c-zfw:#9aa5b3;--c-ramp:#6ea8fe;--c-to:#ffb648;--c-ldg:#4cd2a0;--ring:#6ea8fe;
+ color-scheme:dark
+}}
+:root[data-theme="dark"]{
+ --bg:#0f141a;--card:#18202a;--tx:#e8edf3;--mu:#97a3b1;--bd:#2a3542;--ac:#6ea8fe;--on-ac:#08111c;--ok:#4cd2a0;--okb:#12352b;--bad:#ff8a80;--badb:#3d1a17;--in:#202b38;
+ --c-zfw:#9aa5b3;--c-ramp:#6ea8fe;--c-to:#ffb648;--c-ldg:#4cd2a0;--ring:#6ea8fe;
+ color-scheme:dark}
+:root[data-theme="red"]{
+ --bg:#000;--card:#0b0303;--tx:#ff5b4d;--mu:#d9675a;--bd:#4a1410;--ac:#e14b3a;--on-ac:#000;--ok:#ff8f80;--okb:#25100c;--bad:#ff2b1f;--badb:#3a0603;--in:#180504;
+ --c-zfw:#a4524a;--c-ramp:#d45a46;--c-to:#ff6a52;--c-ldg:#ff9d88;--ring:#ff5b4d;
+ color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%;text-size-adjust:100%;font-size:15px}html[data-fs="1"]{font-size:13.5px}html[data-fs="2"]{font-size:14.25px}html[data-fs="3"]{font-size:15px}html[data-fs="4"]{font-size:15.75px}html[data-fs="5"]{font-size:16.5px}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 Sarabun,"Noto Sans Thai",system-ui,sans-serif;-webkit-tap-highlight-color:transparent;overflow-wrap:break-word;min-height:100vh}
+body{margin:0;background:var(--bg);color:var(--tx);font:1rem/1.5 Sarabun,"Noto Sans Thai",system-ui,sans-serif;-webkit-tap-highlight-color:transparent;overflow-wrap:break-word;min-height:100vh}
 .w{max-width:1240px;margin:0 auto;padding:16px;padding-top:max(16px,env(safe-area-inset-top));padding-bottom:max(16px,env(safe-area-inset-bottom));padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
-.hd{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-bottom:14px}.hd>div{min-width:0;flex:1 1 auto}.hd img{height:72px;width:auto;max-width:120px;object-fit:contain;background:#fff;border-radius:10px;padding:6px;border:1px solid var(--bd);flex:none}h1{font-size:22px;margin:0;line-height:1.25;overflow-wrap:anywhere}.sub{color:var(--mu);font-size:13px;margin:2px 0 0;overflow-wrap:anywhere}
+.hd{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-bottom:14px}.hd>div{min-width:0;flex:1 1 auto}.hd img{height:72px;width:auto;max-width:120px;object-fit:contain;background:#fff;border-radius:10px;padding:6px;border:1px solid var(--bd);flex:none}h1{font-size:1.4667rem;margin:0;line-height:1.25;overflow-wrap:anywhere}.sub{color:var(--mu);font-size:0.8667rem;margin:2px 0 0;overflow-wrap:anywhere}
 .g{display:grid;gap:14px;grid-template-columns:1fr}
 @media(min-width:900px){.g{grid-template-columns:1fr 1.15fr}}
 .c{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px}
-.c h2{font-size:16px;margin:0 0 10px}
+.c h2{font-size:max(16px,1.0667rem);margin:0 0 10px}
 .bar{display:flex;flex-wrap:wrap;gap:12px;align-items:end;margin-bottom:14px}
-label{font-size:12px;color:var(--mu);display:block;line-height:1.35;overflow-wrap:anywhere}
+label{font-size:0.8rem;color:var(--mu);display:block;line-height:1.35;overflow-wrap:anywhere}
 select,input{font:inherit;color:var(--tx);background:var(--in);border:1px solid var(--bd);border-radius:8px;padding:6px 8px;max-width:100%;min-width:0}
 input[type=number]{width:84px;text-align:right;font-variant-numeric:tabular-nums}
 .pm{display:flex;gap:6px;align-items:center;min-width:0}.pm input{flex:1 1 auto;min-width:0}
 .mn{flex:none;font:inherit;font-weight:600;line-height:1;color:var(--tx);background:var(--in);border:1px solid var(--bd);border-radius:8px;padding:8px 10px;cursor:pointer;touch-action:manipulation;-webkit-user-select:none;user-select:none}
 .sc{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scrollbar-width:thin}
-table{border-collapse:collapse;width:100%;font-size:13.5px;max-width:100%}
+table{border-collapse:collapse;width:100%;font-size:0.9rem;max-width:100%}
 th,td{padding:5px 6px;border-bottom:1px solid var(--bd);text-align:right;white-space:nowrap}
 th:first-child,td:first-child{text-align:left}
-th{color:var(--mu);font-weight:600;font-size:12px}
+th{color:var(--mu);font-weight:600;font-size:0.8rem}
 tr.s td{font-weight:700;background:var(--in)}
-.pill{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12.5px;font-weight:600}
+.pill{display:inline-block;padding:2px 10px;border-radius:99px;font-size:0.8333rem;font-weight:600}
 .ok{background:var(--okb);color:var(--ok)}.bad{background:var(--badb);color:var(--bad)}
-.lim{display:flex;justify-content:space-between;gap:8px;padding:7px 0;border-bottom:1px solid var(--bd);font-size:14px}
+.lim{display:flex;justify-content:space-between;gap:8px;padding:7px 0;border-bottom:1px solid var(--bd);font-size:0.9333rem}
 .lim:last-child{border:0}.lim small{color:var(--mu)}
 #ov{padding:12px 14px;border-radius:10px;font-weight:700;margin-bottom:14px}
 svg{width:100%;height:auto;display:block}
-.k{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--mu);margin-top:6px}
+.k{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:0.8333rem;color:var(--mu);margin-top:6px}
 .k i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px}
 .f{display:flex;flex-wrap:wrap;gap:12px}
-.note{font-size:12px;color:var(--mu);margin-top:10px}
-input.ci{width:58px;padding:3px 4px;font-size:12.5px}
+.note{font-size:0.8rem;color:var(--mu);margin-top:10px}
+input.ci{width:58px;padding:3px 4px;font-size:0.8333rem}
 #crt,#mtt{table-layout:fixed;font-variant-numeric:tabular-nums}
 #crt{min-width:620px}#mtt{min-width:320px}
 #crt th,#crt td,#mtt th,#mtt td{text-align:center;padding:4px 2px}
@@ -59,8 +73,8 @@ input.ci{width:58px;padding:3px 4px;font-size:12.5px}
 #crt .tc,#mtt .tc{font-weight:700;background:var(--in);vertical-align:middle}
 #crt .bk{border-left:1px solid var(--bd)}
 #crt tr.gt td,#crt tr.gt th{border-top:1px solid var(--mu)}
-details{margin-top:10px;border-top:1px solid var(--bd);padding-top:8px}summary{cursor:pointer;font-weight:600;font-size:14px}
-button.b{font:inherit;font-weight:600;color:#fff;background:var(--ac);border:0;border-radius:8px;padding:7px 12px;cursor:pointer;touch-action:manipulation}button.g2{font:inherit;color:var(--tx);background:var(--in);border:1px solid var(--bd);border-radius:8px;padding:5px 10px;cursor:pointer;touch-action:manipulation}button.b:active,button.g2:active,.mn:active{filter:brightness(.92)}
+details{margin-top:10px;border-top:1px solid var(--bd);padding-top:8px}summary{cursor:pointer;font-weight:600;font-size:0.9333rem}
+button.b{font:inherit;font-weight:600;color:var(--on-ac);background:var(--ac);border:0;border-radius:8px;padding:7px 12px;cursor:pointer;touch-action:manipulation}button.g2{font:inherit;color:var(--tx);background:var(--in);border:1px solid var(--bd);border-radius:8px;padding:5px 10px;cursor:pointer;touch-action:manipulation}button.b:active,button.g2:active,.mn:active{filter:brightness(.92)}
 /* ===== Responsive hardening: phone & tablet ===== */
 /* grid/flex children must be allowed to shrink below table min-width, otherwise the
    whole page becomes wider than the screen on phones (cards get clipped) */
@@ -82,21 +96,21 @@ button.b{font:inherit;font-weight:600;color:#fff;background:var(--ac);border:0;b
  .hd{gap:10px;margin-bottom:10px}
  .hd img{height:54px;max-width:92px;padding:4px;border-radius:8px}
  h1{font-size:clamp(17px,4.4vw,20px)}
- .sub{font-size:12px}
+ .sub{font-size:0.8rem}
  .g,.bar,.f{gap:10px}
  .c{padding:12px;border-radius:11px}
- .c h2{font-size:15px;line-height:1.35;margin-bottom:8px}
+ .c h2{font-size:1rem;line-height:1.35;margin-bottom:8px}
  .bar>div,.f>div{flex:1 1 calc(50% - 10px);min-width:0}
  .f input[type=number]{width:100%!important;max-width:none}
  .f select{width:100%!important;max-width:none}
  .f div[style*="display:flex"]{display:flex;gap:6px}
  .f div[style*="display:flex"]>*{min-width:0;flex:1 1 0}
- input,select,summary{font-size:16px} /* <16px makes iOS zoom the page on focus */
+ input,select,summary{font-size:max(16px,1.0667rem)} /* <16px makes iOS zoom the page on focus */
  input[type=number],select{padding:9px 8px}
- label{font-size:11.5px}
- .mn{font-size:16px;padding:10px 12px}
+ label{font-size:0.7667rem}
+ .mn{font-size:max(16px,1.0667rem);padding:10px 12px}
  button.b{width:100%;padding:10px 12px}
- table{font-size:13px}
+ table{font-size:0.8667rem}
  th,td{padding:6px 5px}
  #crt{min-width:560px}
  #crt th:first-child{min-width:44px}
@@ -106,18 +120,18 @@ button.b{font:inherit;font-weight:600;color:#fff;background:var(--ac);border:0;b
  #t td:first-child{white-space:normal;min-width:112px}
  #t input[type=number]{width:64px;padding:5px 4px}
  #t select{max-width:130px}
- .lim{font-size:13.5px;gap:4px 8px}
+ .lim{font-size:0.9rem;gap:4px 8px}
  .lim b{text-align:right}
- #ov{font-size:14px;padding:10px 12px;border-radius:9px;margin-bottom:10px}
- .note{font-size:11.5px}
+ #ov{font-size:0.9333rem;padding:10px 12px;border-radius:9px;margin-bottom:10px}
+ .note{font-size:0.7667rem}
  details summary{padding:6px 0}
 }
 /* touch devices of any width (iPad landscape included): keep controls at 16px so
    iOS / iPadOS never zoom the page when a field gets focus */
 @media (pointer:coarse){
- input,select,summary{font-size:16px}
+ input,select,summary{font-size:max(16px,1.0667rem)}
  input[type=number],select{padding:9px 8px}
- .mn{font-size:16px;padding:10px 12px}
+ .mn{font-size:max(16px,1.0667rem);padding:10px 12px}
  button.b{min-height:42px;touch-action:manipulation}
  details summary{padding:6px 0}
 }
@@ -125,16 +139,60 @@ button.b{font:inherit;font-weight:600;color:#fff;background:var(--ac);border:0;b
  .w{padding:10px}
  .bar>div,.f>div{flex:1 1 100%}
  .c{padding:11px}
- h1{font-size:17px}
+ h1{font-size:1.1333rem}
  .hd img{height:46px;max-width:76px}
- .sub{font-size:11.5px}
+ .sub{font-size:0.7667rem}
 }
+
+/* ================= toolbar: theme / text size ================= */
+.tb{display:flex;flex-wrap:wrap;align-items:center;gap:8px;justify-content:space-between;margin:0 0 12px;padding:6px;background:var(--card);border:1px solid var(--bd);border-radius:12px}
+.tb .grp{display:flex;align-items:center;gap:2px;background:var(--in);border:1px solid var(--bd);border-radius:10px;padding:2px}
+.tb button{font:inherit;font-size:.8rem;line-height:1;color:var(--mu);background:transparent;border:0;border-radius:8px;min-height:36px;padding:0 10px;cursor:pointer;touch-action:manipulation;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:background .15s,color .15s}
+.tb button:hover{color:var(--tx)}
+.tb button[aria-pressed="true"]{background:var(--ac);color:var(--on-ac);font-weight:700}
+.tb button:disabled{opacity:.4;cursor:default}
+.tb button:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
+.tb .sw{width:10px;height:10px;border-radius:50%;flex:none;border:1px solid var(--bd);box-shadow:0 0 0 1px var(--card)}
+.tb [data-set-theme="dark"] .sw{background:#0f141a;border-color:#4a5765}
+.tb [data-set-theme="light"] .sw{background:#f4f6f9;border-color:#b9c2cc}
+.tb [data-set-theme="red"] .sw{background:#ff2b1f;border-color:#ff2b1f}
+.tb .fsv{min-width:46px;text-align:center;font-size:.8rem;color:var(--mu);font-variant-numeric:tabular-nums;font-weight:600}
+@media (pointer:coarse){.tb button{min-height:44px}}
+@media (max-width:479px){
+ .tb{gap:6px;padding:5px}
+ .tb button{padding:0 8px}
+ .tb .fsv{min-width:40px}
+}
+@media (prefers-reduced-motion:reduce){.tb button{transition:none}}
+/* red night theme: keep the logo from becoming a white glare source */
+:root[data-theme="red"] .hd img{filter:grayscale(1) sepia(1) saturate(10) hue-rotate(-36deg) brightness(.62);opacity:.85}
+:root[data-theme="red"] .tb button[aria-pressed="true"]{box-shadow:0 0 0 1px var(--bd) inset}
 </style>
+<script>
+(function(){try{
+ var t=localStorage.getItem('c208-theme');
+ if(t!=='dark'&&t!=='light'&&t!=='red'){t=window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}
+ document.documentElement.setAttribute('data-theme',t);
+ var f=localStorage.getItem('c208-fs');if(f&&+f>=1&&+f<=5)document.documentElement.setAttribute('data-fs',f);
+}catch(e){}})();
+</script>
 </head>
 <body>
 <div class="w">
 <div class="hd"><img alt="Cessna" src="data:image/png;base64,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"><div><h1>Cessna Caravan C208 EX — Weight &amp; Balance</h1>
 <div class="sub">คำนวณจากไฟล์ C208EX_W_B (DRRAA) · น้ำหนัก lbs · Arm นิ้ว · Moment ÷ 1000</div></div></div>
+<div class="tb" role="toolbar" aria-label="การแสดงผล">
+ <div class="grp" role="group" aria-label="ธีมสี">
+  <button type="button" data-set-theme="dark" aria-pressed="true"><i class="sw" aria-hidden="true"></i>มืด</button>
+  <button type="button" data-set-theme="light" aria-pressed="false"><i class="sw" aria-hidden="true"></i>สว่าง</button>
+  <button type="button" data-set-theme="red" aria-pressed="false"><i class="sw" aria-hidden="true"></i>Night</button>
+ </div>
+ <div class="grp" role="group" aria-label="ขนาดตัวอักษร">
+  <button type="button" id="fs-" aria-label="ลดขนาดตัวอักษร">A−</button>
+  <span class="fsv" id="fsv" aria-live="polite">100%</span>
+  <button type="button" id="fs+" aria-label="เพิ่มขนาดตัวอักษร">A+</button>
+ </div>
+</div>
 <div class="bar">
  <div><label>ทะเบียน / เครื่องบิน</label><select id="ac"></select></div>
  <div><label>ภารกิจ</label><select id="ms"><option value="vip">VIP 3+7</option><option value="rain">ทำฝน</option></select></div>
@@ -185,7 +243,7 @@ button.b{font:inherit;font-weight:600;color:#fff;background:var(--ac);border:0;b
   <div class="c"><h2>รายการบรรทุก</h2><div class="sc"><table id="t"></table></div>
    <div class="note">แก้ไขน้ำหนักในช่องสีเทาได้ (Arm ถูกล็อกไว้) ผลคำนวณอัปเดตทันที <span class="swhint">· บนมือถือปัดตารางไปทางซ้าย–ขวาเพื่อดูคอลัมน์ที่เหลือ</span></div></div>
   <div class="c"><h2>CG Envelope</h2><svg id="ch" viewBox="0 0 380 330"></svg>
-   <div class="note" style="margin:4px 0 0">อ้างอิง POH Section 6 Figure 6-17 (208B 867 SHP) · พื้นที่เทา = ใช้ได้เฉพาะ Take-off · แถบขีดเฉียง = ช่วง C.G. ท้ายสุด (203.1–204.35)</div><div class="k"><span><i style="background:#8a94a3"></i>ZFW</span><span><i style="background:#0b5ed7"></i>Ramp</span><span><i style="background:#e08a00"></i>Take-off</span><span><i style="background:#13a37f"></i>Landing</span></div></div>
+   <div class="note" style="margin:4px 0 0">อ้างอิง POH Section 6 Figure 6-17 (208B 867 SHP) · พื้นที่เทา = ใช้ได้เฉพาะ Take-off · แถบขีดเฉียง = ช่วง C.G. ท้ายสุด (203.1–204.35)</div><div class="k"><span><i style="background:var(--c-zfw)"></i>ZFW</span><span><i style="background:var(--c-ramp)"></i>Ramp</span><span><i style="background:var(--c-to)"></i>Take-off</span><span><i style="background:var(--c-ldg)"></i>Landing</span></div></div>
   <div class="c"><h2>การตรวจสอบขีดจำกัด</h2><div id="lm"></div></div>
  </div>
 </div>
@@ -237,7 +295,7 @@ function calc(){
  const cg=(w,m)=>w>0?m*1000/w:0;
  const put=(k,w,m,a)=>{$("w"+k).textContent=f1(w);$("m"+k).textContent=f2(m);$("c"+k).textContent=k==="f"||k==="x"||k==="u"?"":f2(cg(w,m));$("a"+k).textContent=a?f2(cg(w,m)):""};
  put("z",zW,zM,1);put("f",fl,fM,1);put("r",rW,rM,0);put("x",tx,tM,1);put("t",tW,tMo,0);put("u",used,uM,1);put("l",lW,lM,0);
- const P={z:[zW,cg(zW,zM)],r:[rW,cg(rW,rM)],t:[tW,cg(tW,tMo)],l:[lW,cg(lW,lM)]};
+ const P={z:[zW,cg(zW,zM)],r:[rW,cg(rW,rM)],t:[tW,cg(tW,tMo)],l:[lW,cg(lW,lM)]};window.__P=P;
  const cgok=p=>p[1]>=fwd(p[0])&&p[1]<=L.aft;
  const chk=[
   ["Ramp Weight",`${f1(rW)} / ${L.ramp} lbs`,rW<=L.ramp],
@@ -265,7 +323,7 @@ function draw(P){
  s+=`<line x1="${X(fw85)}" x2="${X(204.35)}" y1="${Y(8500)}" y2="${Y(8500)}" stroke="var(--tx)" stroke-width="2"/>`;
  s+=`<text x="${X(175)+4}" y="${Y(8807)-3}" font-size="8" fill="var(--mu)">Max Take-off 8807 lbs</text><text x="${X(175)+4}" y="${Y(8500)-3}" font-size="8" fill="var(--mu)">Max Landing 8500 lbs</text><text x="${X(190)}" y="${Y(5400)}" font-size="9" fill="var(--mu)" text-anchor="middle">Center of Gravity Limits</text>`;
  s+=`<text x="200" y="12" font-size="9" fill="var(--mu)" text-anchor="middle">C.G. (inches aft of datum, FS 0.0)</text>`;
- const pts=[["z","#8a94a3","ZFW"],["r","#0b5ed7","R"],["t","#e08a00","T/O"],["l","#13a37f","L"]];
+ const cv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();const pts=[["z",cv("--c-zfw"),"ZFW"],["r",cv("--c-ramp"),"R"],["t",cv("--c-to"),"T/O"],["l",cv("--c-ldg"),"L"]];
  s+=`<polyline fill="none" stroke="var(--mu)" stroke-width="1" stroke-dasharray="3 2" points="${pt(pts.map(p=>[P[p[0]][1],P[p[0]][0]]))}"/>`;
  pts.forEach(p=>{const v=P[p[0]];s+=`<circle cx="${X(v[1])}" cy="${Y(v[0])}" r="5" fill="${p[1]}" stroke="var(--card)" stroke-width="1.5"/>`});
  $("ch").innerHTML=s;
@@ -299,7 +357,7 @@ function pfCalc(){
  const uniq=[...new Set(warn)];
  pfLast={fuel:Math.round(fuel),tm:Math.round(tm)};
  const hh=Math.floor(pfLast.tm/60),mm=pfLast.tm%60;
- R.innerHTML=`<div class="lim"><span>ระยะเทียบลมสงบ (still-air)</span><b>${Math.round(De)} NM</b></div><div class="lim"><span>Fuel required</span><b>${pfLast.fuel.toLocaleString("en-US")} lbs</b></div><div class="lim"><span>Time required</span><b>${hh} ชม. ${mm} นาที <span style="color:var(--mu);font-weight:400">(${pfLast.tm} นาที)</span></b></div><div class="lim"><span>Ground speed เฉลี่ย</span><b>${Math.round(D/(fuel&&tm?tm/60:1))} kt</b></div>`+(uniq.length?`<div class="note" style="color:var(--bad)">⚠ ${uniq.join(" · ")}</div>`:"")+`<div style="margin-top:8px"><button id="pfu" style="font:inherit;font-weight:600;color:#fff;background:var(--ac);border:0;border-radius:8px;padding:7px 12px;cursor:pointer">ใช้เป็น Trip fuel</button><div class="note" style="margin:4px 0 0">Trip fuel = Fuel required − Taxi fuel − Final reserve 45 นาที (เพราะกราฟรวมสองรายการนี้แล้ว)</div></div>`;
+ R.innerHTML=`<div class="lim"><span>ระยะเทียบลมสงบ (still-air)</span><b>${Math.round(De)} NM</b></div><div class="lim"><span>Fuel required</span><b>${pfLast.fuel.toLocaleString("en-US")} lbs</b></div><div class="lim"><span>Time required</span><b>${hh} ชม. ${mm} นาที <span style="color:var(--mu);font-weight:400">(${pfLast.tm} นาที)</span></b></div><div class="lim"><span>Ground speed เฉลี่ย</span><b>${Math.round(D/(fuel&&tm?tm/60:1))} kt</b></div>`+(uniq.length?`<div class="note" style="color:var(--bad)">⚠ ${uniq.join(" · ")}</div>`:"")+`<div style="margin-top:8px"><button id="pfu" style="font:inherit;font-weight:600;color:#fff;background:var(--ac);border:0;border-radius:8px;padding:7px 12px;cursor:pointer;color:var(--on-ac)">ใช้เป็น Trip fuel</button><div class="note" style="margin:4px 0 0">Trip fuel = Fuel required − Taxi fuel − Final reserve 45 นาที (เพราะกราฟรวมสองรายการนี้แล้ว)</div></div>`;
  $("pfu").onclick=()=>{const res=n($("pph").value)*45/60;$("fu").value=Math.max(0,Math.round(pfLast.fuel-n($("tx").value)-res));calc()};
 }
 ["pfm","pfd","pfs","pfw","pfa","pfo"].forEach(i=>{$(i).oninput=pfCalc;$(i).onchange=pfCalc});
@@ -343,6 +401,44 @@ renderCr();renderMt();crCalc();
 $("cpa").oninput=$("cpa").onchange=()=>{$("pfa").value=$("cpa").value;crCalc();pfCalc()};
 $("pfa").oninput=$("pfa").onchange=()=>{$("cpa").value=$("pfa").value;crCalc();pfCalc()};
 $("pfa").value=$("cpa").value;
+
+/* ================= theme / text-size ================= */
+(function(){
+ const root=document.documentElement,
+       FS=[0.9,0.95,1,1.05,1.1],
+       FSL=['90%','95%','100%','105%','110%'],
+       fsv=document.getElementById('fsv'),
+       bMinus=document.getElementById('fs-'),bPlus=document.getElementById('fs+');
+ let fsi=Math.max(0,Math.min(4,(parseInt(root.getAttribute('data-fs')||'3',10)||3)-1));
+ function themeMeta(t){
+  var c=t==='red'?'#000000':(t==='dark'?'#0f141a':'#f4f6f9');
+  var ms=document.querySelectorAll('meta[name="theme-color"]');
+  for(var i=0;i<ms.length;i++)ms[i].setAttribute('content',c);
+ }
+ function applyTheme(t){
+  if(t!=='dark'&&t!=='light'&&t!=='red')t='dark';
+  root.setAttribute('data-theme',t);
+  var bs=document.querySelectorAll('[data-set-theme]');
+  for(var i=0;i<bs.length;i++)bs[i].setAttribute('aria-pressed',bs[i].getAttribute('data-set-theme')===t?'true':'false');
+  themeMeta(t);
+  try{localStorage.setItem('c208-theme',t)}catch(e){}
+  if(window.__P){try{draw(window.__P)}catch(e){}}
+ }
+ function applyFs(i){
+  fsi=Math.max(0,Math.min(4,i));
+  root.setAttribute('data-fs',String(fsi+1));
+  root.style.fontSize=(15*FS[fsi]).toFixed(2)+'px';
+  fsv.textContent=FSL[fsi];
+  bMinus.disabled=fsi===0;bPlus.disabled=fsi===4;
+  try{localStorage.setItem('c208-fs',String(fsi+1))}catch(e){}
+ }
+ var bs=document.querySelectorAll('[data-set-theme]');
+ for(var i=0;i<bs.length;i++){(function(b){b.onclick=function(){applyTheme(b.getAttribute('data-set-theme'))}})(bs[i])}
+ bMinus.onclick=function(){applyFs(fsi-1)};
+ bPlus.onclick=function(){applyFs(fsi+1)};
+ applyTheme(root.getAttribute('data-theme')||'dark');
+ applyFs(fsi);
+})();
 </script>
 </body>
 </html>
