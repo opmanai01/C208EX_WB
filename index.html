@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>C208 EX Weight &amp; Balance</title>
+<meta name="description" content="คำนวณน้ำหนักและจุดศูนย์ถ่วง Cessna 208B Grand Caravan EX (C208 EX) พร้อมตาราง Cruise / Max torque / Fuel &amp; Time จาก POH">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f4f6f9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f141a" media="(prefers-color-scheme: dark)">
+<meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="C208 W&amp;B">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f6f9;--card:#fff;--tx:#17202b;--mu:#64707f;--bd:#dde3ea;--ac:#0b5ed7;--ok:#13795b;--okb:#e1f4ec;--bad:#b42318;--badb:#fde8e6;--in:#f0f4fa;box-sizing:border-box}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f141a;--card:#18202a;--tx:#e8edf3;--mu:#97a3b1;--bd:#2a3542;--ac:#6ea8fe;--ok:#4cd2a0;--okb:#12352b;--bad:#ff8a80;--badb:#3d1a17;--in:#202b38;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f141a;--card:#18202a;--tx:#e8edf3;--mu:#97a3b1;--bd:#2a3542;--ac:#6ea8fe;--ok:#4cd2a0;--okb:#12352b;--bad:#ff8a80;--badb:#3d1a17;--in:#202b38;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%;text-size-adjust:100%}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 Sarabun,"Noto Sans Thai",system-ui,sans-serif;-webkit-tap-highlight-color:transparent;overflow-wrap:break-word;min-height:100vh}
+.w{max-width:1240px;margin:0 auto;padding:16px;padding-top:max(16px,env(safe-area-inset-top));padding-bottom:max(16px,env(safe-area-inset-bottom));padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
+.hd{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-bottom:14px}.hd>div{min-width:0;flex:1 1 auto}.hd img{height:72px;width:auto;max-width:120px;object-fit:contain;background:#fff;border-radius:10px;padding:6px;border:1px solid var(--bd);flex:none}h1{font-size:22px;margin:0;line-height:1.25;overflow-wrap:anywhere}.sub{color:var(--mu);font-size:13px;margin:2px 0 0;overflow-wrap:anywhere}
+.g{display:grid;gap:14px;grid-template-columns:1fr}
+@media(min-width:900px){.g{grid-template-columns:1fr 1.15fr}}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px}
+.c h2{font-size:16px;margin:0 0 10px}
+.bar{display:flex;flex-wrap:wrap;gap:12px;align-items:end;margin-bottom:14px}
+label{font-size:12px;color:var(--mu);display:block;line-height:1.35;overflow-wrap:anywhere}
+select,input{font:inherit;color:var(--tx);background:var(--in);border:1px solid var(--bd);border-radius:8px;padding:6px 8px;max-width:100%;min-width:0}
+input[type=number]{width:84px;text-align:right;font-variant-numeric:tabular-nums}
+.pm{display:flex;gap:6px;align-items:center;min-width:0}.pm input{flex:1 1 auto;min-width:0}
+.mn{flex:none;font:inherit;font-weight:600;line-height:1;color:var(--tx);background:var(--in);border:1px solid var(--bd);border-radius:8px;padding:8px 10px;cursor:pointer;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+.sc{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scrollbar-width:thin}
+table{border-collapse:collapse;width:100%;font-size:13.5px;max-width:100%}
+th,td{padding:5px 6px;border-bottom:1px solid var(--bd);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th{color:var(--mu);font-weight:600;font-size:12px}
+tr.s td{font-weight:700;background:var(--in)}
+.pill{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12.5px;font-weight:600}
+.ok{background:var(--okb);color:var(--ok)}.bad{background:var(--badb);color:var(--bad)}
+.lim{display:flex;justify-content:space-between;gap:8px;padding:7px 0;border-bottom:1px solid var(--bd);font-size:14px}
+.lim:last-child{border:0}.lim small{color:var(--mu)}
+#ov{padding:12px 14px;border-radius:10px;font-weight:700;margin-bottom:14px}
+svg{width:100%;height:auto;display:block}
+.k{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--mu);margin-top:6px}
+.k i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px}
+.f{display:flex;flex-wrap:wrap;gap:12px}
+.note{font-size:12px;color:var(--mu);margin-top:10px}
+input.ci{width:58px;padding:3px 4px;font-size:12.5px}
+#crt,#mtt{table-layout:fixed;font-variant-numeric:tabular-nums}
+#crt{min-width:620px}#mtt{min-width:320px}
+#crt th,#crt td,#mtt th,#mtt td{text-align:center;padding:4px 2px}
+#crt th:first-child,#mtt th:first-child{width:50px}
+#crt .tc,#mtt .tc{font-weight:700;background:var(--in);vertical-align:middle}
+#crt .bk{border-left:1px solid var(--bd)}
+#crt tr.gt td,#crt tr.gt th{border-top:1px solid var(--mu)}
+details{margin-top:10px;border-top:1px solid var(--bd);padding-top:8px}summary{cursor:pointer;font-weight:600;font-size:14px}
+button.b{font:inherit;font-weight:600;color:#fff;background:var(--ac);border:0;border-radius:8px;padding:7px 12px;cursor:pointer;touch-action:manipulation}button.g2{font:inherit;color:var(--tx);background:var(--in);border:1px solid var(--bd);border-radius:8px;padding:5px 10px;cursor:pointer;touch-action:manipulation}button.b:active,button.g2:active,.mn:active{filter:brightness(.92)}
+/* ===== Responsive hardening: phone & tablet ===== */
+/* grid/flex children must be allowed to shrink below table min-width, otherwise the
+   whole page becomes wider than the screen on phones (cards get clipped) */
+.g,.g>div,.c,.sc{min-width:0}
+/* sticky first column so wide tables stay readable while swiping */
+#t th:first-child,#t td:first-child{position:sticky;left:0;z-index:3;background:var(--card)}
+#t tr.s th:first-child,#t tr.s td:first-child{background:var(--in)}
+#crt th:first-child,#crt td:first-child,#crt .tc{position:sticky;left:0;z-index:3;background:var(--card)}
+#crt .tc{background:var(--in)}
+#crt th:first-child{z-index:4}
+#t input[type=number]{width:84px}
+.sc::-webkit-scrollbar{height:8px}
+.sc::-webkit-scrollbar-thumb{background:var(--bd);border-radius:99px}
+.sc::-webkit-scrollbar-track{background:transparent}
+.swhint{display:none}
+@media (max-width:899px){
+ .swhint{display:inline}
+ .w{padding:12px;padding-top:max(12px,env(safe-area-inset-top));padding-bottom:max(20px,env(safe-area-inset-bottom));padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right))}
+ .hd{gap:10px;margin-bottom:10px}
+ .hd img{height:54px;max-width:92px;padding:4px;border-radius:8px}
+ h1{font-size:clamp(17px,4.4vw,20px)}
+ .sub{font-size:12px}
+ .g,.bar,.f{gap:10px}
+ .c{padding:12px;border-radius:11px}
+ .c h2{font-size:15px;line-height:1.35;margin-bottom:8px}
+ .bar>div,.f>div{flex:1 1 calc(50% - 10px);min-width:0}
+ .f input[type=number]{width:100%!important;max-width:none}
+ .f select{width:100%!important;max-width:none}
+ .f div[style*="display:flex"]{display:flex;gap:6px}
+ .f div[style*="display:flex"]>*{min-width:0;flex:1 1 0}
+ input,select,summary{font-size:16px} /* <16px makes iOS zoom the page on focus */
+ input[type=number],select{padding:9px 8px}
+ label{font-size:11.5px}
+ .mn{font-size:16px;padding:10px 12px}
+ button.b{width:100%;padding:10px 12px}
+ table{font-size:13px}
+ th,td{padding:6px 5px}
+ #crt{min-width:560px}
+ #crt th:first-child{min-width:44px}
+ #crt th,#crt td,#mtt th,#mtt td{padding:5px 3px}
+ #t{min-width:470px}
+ #t th,#t td{padding:6px 5px}
+ #t td:first-child{white-space:normal;min-width:112px}
+ #t input[type=number]{width:64px;padding:5px 4px}
+ #t select{max-width:130px}
+ .lim{font-size:13.5px;gap:4px 8px}
+ .lim b{text-align:right}
+ #ov{font-size:14px;padding:10px 12px;border-radius:9px;margin-bottom:10px}
+ .note{font-size:11.5px}
+ details summary{padding:6px 0}
+}
+/* touch devices of any width (iPad landscape included): keep controls at 16px so
+   iOS / iPadOS never zoom the page when a field gets focus */
+@media (pointer:coarse){
+ input,select,summary{font-size:16px}
+ input[type=number],select{padding:9px 8px}
+ .mn{font-size:16px;padding:10px 12px}
+ button.b{min-height:42px;touch-action:manipulation}
+ details summary{padding:6px 0}
+}
+@media (max-width:479px){
+ .w{padding:10px}
+ .bar>div,.f>div{flex:1 1 100%}
+ .c{padding:11px}
+ h1{font-size:17px}
+ .hd img{height:46px;max-width:76px}
+ .sub{font-size:11.5px}
+}
+</style>
+</head>
+<body>
+<div class="w">
+<div class="hd"><img alt="Cessna" src="data:image/png;base64,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"><div><h1>Cessna Caravan C208 EX — Weight &amp; Balance</h1>
+<div class="sub">คำนวณจากไฟล์ C208EX_W_B (DRRAA) · น้ำหนัก lbs · Arm นิ้ว · Moment ÷ 1000</div></div></div>
+<div class="bar">
+ <div><label>ทะเบียน / เครื่องบิน</label><select id="ac"></select></div>
+ <div><label>ภารกิจ</label><select id="ms"><option value="vip">VIP 3+7</option><option value="rain">ทำฝน</option></select></div>
+</div>
+<div id="ov"></div>
+<div class="g">
+ <div style="display:grid;gap:14px;align-content:start">
+  <div class="c"><h2>สมรรถนะ Cruise — Fuel flow &amp; KTAS (POH Fig 5-36 / 5-37)</h2>
+   <div class="f">
+    <div><label>Pressure altitude (ft)</label><input type="number" id="cpa" step="500" value="8000"></div>
+    <div><label>OAT (°C)</label><div class="pm"><input type="number" id="cot" step="1" value="0" inputmode="decimal"><button type="button" class="mn" id="cotn" title="สลับเครื่องหมาย ±" aria-label="สลับเครื่องหมายบวกลบ">±</button></div></div>
+    <div><label>RPM</label><select id="crp"><option>1900</option><option>1750</option><option>1600</option></select></div>
+    <div><label>กำหนดด้วย</label><select id="ck"><option value="2">KTAS</option><option value="0">Torque</option></select></div>
+    <div><label id="cvl">KTAS (kt)</label><input type="number" id="cv" step="1" value="170"></div>
+   </div>
+   <div id="crr" style="margin-top:10px"></div>
+   <details><summary>ตารางข้อมูล Cruise Performance (POH Fig 5-36)</summary>
+    <div style="margin:8px 0"><label>Pressure altitude</label><select id="cra"></select></div>
+    <div class="sc"><table id="crt"></table></div>
+    <div class="note">Tq = Torque (ft-lb) · FF = Fuel flow (lbs/ชม.) · เรียงจากมากไปน้อยในแต่ละอุณหภูมิ · 8,807 lbs, Inertial separator NORMAL <span class="swhint">· ปัดแนวนอนได้บนมือถือ</span></div></details>
+   <details><summary>ตาราง Max cruise torque (POH Fig 5-37)</summary>
+    <div style="margin:8px 0"><label>Pressure altitude</label><select id="mta"></select></div>
+    <div class="sc"><table id="mtt"></table></div></details>
+   <div class="note">Do not exceed maximum cruise torque or 805 °C ITT · Without cargo pod · ค่าระหว่างตารางคำนวณแบบเส้นตรง (interpolation)</div></div>
+  <div class="c"><h2>Fuel &amp; Time Required (POH)</h2>
+   <div class="f">
+    <div><label>กำลังเครื่อง</label><select id="pfm"><option value="cruise">Max Cruise (Fig 5-38)</option><option value="range">Max Range (Fig 5-39)</option></select></div>
+    <div><label>ระยะทาง (NM)</label><input type="number" id="pfd" step="5" value="150"></div>
+    <div><label>ลม (kt)</label><div style="display:flex;gap:6px"><select id="pfs"><option value="h">Headwind</option><option value="t">Tailwind</option></select><input type="number" id="pfw" step="5" value="0" style="width:64px"></div></div>
+    <div><label>ระดับบิน (ft)</label><input type="number" id="pfa" step="1000" value="8000"></div>
+    <div><label>เงื่อนไขเพิ่มเติม</label><select id="pfo"><option value="n">ปกติ</option><option value="b">Inertial separator BYPASS</option><option value="h">Cabin heat ON</option></select></div>
+   </div>
+   <div id="pfr" style="margin-top:10px"></div>
+   <div class="note">อ่านค่าจากกราฟ POH Section 5 Fig 5-38 / 5-39 (208B 867 SHP G1000, ไม่มี Cargo Pod, 8,807 lbs, Std temp, 1,900 RPM) ผลเป็นค่าประมาณ · Fuel required ในกราฟรวม start, taxi, take-off, climb, descent และสำรอง 45 นาที</div></div>
+  <div class="c"><h2>เชื้อเพลิง</h2><div class="f">
+   <div><label>อัตราสิ้นเปลือง (lbs/ชม.)</label><input type="number" id="pph" step="10"></div>
+   <div><label>Taxi fuel (lbs)</label><input type="number" id="tx" step="5"></div>
+   <div><label>Trip fuel (lbs)</label><input type="number" id="fu" step="10"></div>
+   <div id="opd2"><label>Operation fuel +<span id="opl">25</span> นาที<br><small>นาที · lbs</small></label><div style="display:flex;gap:6px"><input type="number" id="opm" step="1" style="width:62px"><input type="number" id="opf" step="5" style="width:80px"></div></div>
+   <div><label>Alternate fuel +<span id="aml">60</span> นาที<br><small>นาที · lbs</small></label><div style="display:flex;gap:6px"><input type="number" id="altm" step="1" style="width:62px"><input type="number" id="alt" step="5" style="width:80px"></div></div>
+   <div><label>Final reserve fuel (lbs)<br><small>+45 นาที</small></label><input type="number" id="res" readonly style="background:transparent;font-weight:600"></div>
+   <div><label>เชื้อเพลิงทั้งหมด (lbs)<br><small>แก้ไขได้ · ส่วนต่างไปที่ Trip fuel</small></label><input type="number" id="tot" step="10" style="width:100px;font-weight:700;font-size:16px"></div></div>
+   <div id="fgal" class="note" style="margin:8px 0 0"></div>
+   <div id="en" style="margin-top:10px"></div>
+  </div>
+ </div>
+ <div style="display:grid;gap:14px;align-content:start">
+  <div class="c"><h2>รายการบรรทุก</h2><div class="sc"><table id="t"></table></div>
+   <div class="note">แก้ไขน้ำหนักในช่องสีเทาได้ (Arm ถูกล็อกไว้) ผลคำนวณอัปเดตทันที <span class="swhint">· บนมือถือปัดตารางไปทางซ้าย–ขวาเพื่อดูคอลัมน์ที่เหลือ</span></div></div>
+  <div class="c"><h2>CG Envelope</h2><svg id="ch" viewBox="0 0 380 330"></svg>
+   <div class="note" style="margin:4px 0 0">อ้างอิง POH Section 6 Figure 6-17 (208B 867 SHP) · พื้นที่เทา = ใช้ได้เฉพาะ Take-off · แถบขีดเฉียง = ช่วง C.G. ท้ายสุด (203.1–204.35)</div><div class="k"><span><i style="background:#8a94a3"></i>ZFW</span><span><i style="background:#0b5ed7"></i>Ramp</span><span><i style="background:#e08a00"></i>Take-off</span><span><i style="background:#13a37f"></i>Landing</span></div></div>
+  <div class="c"><h2>การตรวจสอบขีดจำกัด</h2><div id="lm"></div></div>
+ </div>
+</div>
+<div class="note">⚠ ใช้เพื่อประกอบการวางแผนเท่านั้น ต้องตรวจสอบกับ POH / ข้อมูลน้ำหนักชั่งจริงของเครื่องก่อนทำการบิน</div>
+</div>
+<script>
+const FS=[[0,202.8],[34,202.8],[67,202.8],[101,202.77],[134,202.74],[168,202.72],[201,202.71],[235,202.71],[268,202.7],[302,202.71],[335,202.71],[369,202.72],[402,202.74],[436,202.76],[469,202.78],[503,202.81],[536,202.84],[570,202.87],[603,202.9],[637,202.93],[670,202.95],[704,202.97],[737,202.99],[771,203.01],[804,203.03],[838,203.05],[871,203.06],[905,203.07],[938,203.09],[972,203.1],[1005,203.12],[1039,203.13],[1072,203.14],[1106,203.16],[1139,203.17],[1173,203.18],[1206,203.19],[1240,203.2],[1273,203.21],[1307,203.22],[1340,203.22],[1374,203.23],[1407,203.23],[1441,203.24],[1474,203.24],[1508,203.24],[1541,203.23],[1575,203.23],[1608,203.23],[1642,203.22],[1675,203.21],[1709,203.2],[1742,203.19],[1776,203.18],[1809,203.17],[1843,203.16],[1876,203.15],[1910,203.14],[1943,203.13],[1977,203.12],[2010,203.12],[2044,203.12],[2077,203.11],[2111,203.11],[2144,203.11],[2178,203.1],[2191,203.1],[2211,203.08],[2246,203.04]]; // [lbs, FS arm in] จาก POH Fig 6-15 (Sheet 4) · 6.7 lb/gal · jet fuel 60°F
+let ST={opM:25,opL:null,altM:60,altL:null,cargo:false},FP={op:0,alt:0,res:0};
+const AC={1931:[4932.1,920.8],1932:[4927.1,920.51],1933:[4941.1,922.14],1934:[4919.1,919.9],1935:[4849.1,902.52]};
+const PRE={
+ vip:{items:[["P&CP",353,135.5],["Pax Row1 (2 คน)",353,173.9],["Pax Row2 (2 คน)",353,209.9],["Pax Row3 (2 คน)",353,245.9],["Pax Row4 (2 คน)",353,281.9],["Baggage",300,344]],fuel:1100,burn:1000,pph:400},
+ rain:{items:[["ชุดท่อโปรย",22,278],["P&CP",353,135.5],["วช + ช่าง",353,172.1],["แผ่นไม้กั้นหน้า",6.6,217.8],["สาร 700 kg (1,544 lb)",1544,241.1,[["สาร 700 kg (1,544 lb)",241.1],["Cargo",262.4]]],["ผ้าใบ",11,274.9],["2 คนโปรย",353,319.5],["แผ่นไม้กั้นหลัง",6.6,332]],fuel:675,burn:603,pph:300}};
+const L={ramp:8842,to:8807,ldg:8500,aft:204.35};
+const fwd=w=>w<=6500?185:w<=8000?185+(w-6500)*(193.37-185)/1500:193.37+(w-8000)*(199.15-193.37)/807;
+const armF=l=>{l=Math.max(0,Math.min(l,FS[FS.length-1][0]));for(let i=1;i<FS.length;i++){const a=FS[i-1],b=FS[i];if(l<=b[0])return a[1]+(b[1]-a[1])*(l-a[0])/((b[0]-a[0])||1)}return FS[FS.length-1][1]};
+const $=id=>document.getElementById(id),n=v=>parseFloat(v)||0,f1=v=>v.toLocaleString("en-US",{minimumFractionDigits:1,maximumFractionDigits:1}),f2=v=>v.toFixed(2);
+const acs=$("ac");Object.keys(AC).forEach(k=>acs.add(new Option("C-208EX  "+k,k)));acs.value="1935";
+let rows=[];
+function build(){
+ const p=PRE[$("ms").value];
+ $("tx").value=35;$("fu").value=p.burn;$("pph").value=p.pph;ST.opM=25;ST.opL=null;ST.altM=60;ST.altL=null;ST.cargo=false;$("opd2").style.display=$("ms").value==="rain"?"":"none";
+ let h='<tr><th>รายการ</th><th>น้ำหนัก (lbs)</th><th>Arm (in)</th><th>Moment/1000</th><th>C.G.</th><th>Cumul (lbs)</th></tr><tr id="r0"><td>Basic Empty Weight</td><td id="w0"></td><td id="a0"></td><td id="m0"></td><td id="c0"></td><td id="u0"></td></tr>';
+ p.items.forEach((it,i)=>{const k=i+1;h+=`<tr><td>${it[3]?'<select data-o="'+k+'">'+it[3].map(o=>`<option value="${o[1]}">${o[0]}</option>`).join("")+"</select>":it[0]}</td><td><input type="number" step="1" data-i="${k}" data-f="w" value="${it[1]}"></td><td id="ar${k}">${it[2]}</td><td id="m${k}"></td><td id="c${k}"></td><td id="u${k}"></td></tr>`});
+ const K=p.items.length+1;
+ h+=`<tr class="s"><td>Zero Fuel Weight</td><td id="wz"></td><td id="az"></td><td id="mz"></td><td id="cz"></td><td></td></tr>`;
+ [["Usable fuel","f"],["Ramp Weight","r"],["Taxi &amp; Run-up","x"],["Take-off","t"],["Fuel used","u"],["Landing","l"]].forEach(a=>{h+=`<tr class="${["r","t","l"].includes(a[1])?"s":""}"><td>${a[0]}</td><td id="w${a[1]}"></td><td id="a${a[1]}"></td><td id="m${a[1]}"></td><td id="c${a[1]}"></td><td></td></tr>`});
+ $("t").innerHTML=h;rows=p.items.map(x=>({w:x[1],a:x[2]}));
+ $("t").querySelectorAll("input").forEach(e=>e.oninput=()=>{rows[e.dataset.i-1][e.dataset.f]=n(e.value);calc()});
+ $("t").querySelectorAll("select[data-o]").forEach(e=>e.onchange=()=>{rows[e.dataset.o-1].a=n(e.value);$("ar"+e.dataset.o).textContent=e.value;ST.cargo=e.selectedIndex===1;calc()});
+ calc();
+}
+const st=(ok,t)=>`<span class="pill ${ok?"ok":"bad"}">${t}</span>`;
+function calc(){
+ const [bw,bm]=AC[acs.value];let W=bw,M=bm;const cum=[[bw,bm]];
+ const set=(i,w,m)=>{const e=id=>$(id+i);e("m").textContent=f2(m);e("c").textContent=w?f2(m*1000/w):"-"};
+ $("w0").textContent=f1(bw);$("a0").textContent=f2(bm*1000/bw);set(0,bw,bm);$("u0").textContent=f1(W);
+ rows.forEach((r,i)=>{const m=r.w*r.a/1000;W+=r.w;M+=m;set(i+1,W,M);$("m"+(i+1)).textContent=f2(m);$("u"+(i+1)).textContent=f1(W)});
+ const zW=W,zM=M;
+ const rain=$("ms").value==="rain",pph0=n($("pph").value),res=pph0*45/60,tx=n($("tx").value),fu=n($("fu").value),opOn=rain&&!ST.cargo;
+ const alt=ST.altL!=null?ST.altL:pph0*ST.altM/60,opf=opOn?(ST.opL!=null?ST.opL:pph0*ST.opM/60):0,used=fu+opf,fl=tx+used+res+alt;
+ FP={op:opf,alt,res};
+ const mn=(L,M,v)=>L!=null?(pph0?v/pph0*60:0):M,altMin=mn(ST.altL,ST.altM,alt),opMin=opOn?mn(ST.opL,ST.opM,opf):0;
+ [["alt",alt],["res",res],["opf",opf],["tot",fl],["altm",altMin],["opm",opMin]].forEach(q=>$(q[0]).value=+q[1].toFixed(1));
+ $("opl").textContent=+(opOn?opMin:ST.opM).toFixed(1);$("aml").textContent=+altMin.toFixed(1);$("opm").disabled=$("opf").disabled=!opOn;
+ {const m=pph0?Math.round((tx+fu+opf)/pph0*60):0;$("en").innerHTML=pph0?`<small style="color:var(--mu)">Endurance (ไม่รวม Alternate 60 นาที + Reserve 45 นาที)</small><br><b style="font-size:18px">${Math.floor(m/60)} ชม. ${m%60} นาที</b> <span style="color:var(--mu)">(${m} นาที)</span>`:""}
+ const aU=armF(fl),toF=Math.max(0,fl-tx),ldF=toF-used,fM=fl*aU/1000,tM=tx*aU/1000,uM=used*aU/1000,toM=fM-tM,ldM=toM-uM;
+ const rW=zW+fl,rM=zM+fM,tW=rW-tx,tMo=zM+toM,lW=tW-used,lM=zM+ldM;
+ $("fgal").textContent=fl>0?`เชื้อเพลิงทั้งหมด ≈ ${(fl/6.7).toFixed(1)} US gal · Arm Usable fuel ${f2(aU)} in (ตาราง POH Fig 6-15) · Taxi และเชื้อเพลิงที่ใช้ไปคำนวณด้วย Arm นี้`:"";
+ const cg=(w,m)=>w>0?m*1000/w:0;
+ const put=(k,w,m,a)=>{$("w"+k).textContent=f1(w);$("m"+k).textContent=f2(m);$("c"+k).textContent=k==="f"||k==="x"||k==="u"?"":f2(cg(w,m));$("a"+k).textContent=a?f2(cg(w,m)):""};
+ put("z",zW,zM,1);put("f",fl,fM,1);put("r",rW,rM,0);put("x",tx,tM,1);put("t",tW,tMo,0);put("u",used,uM,1);put("l",lW,lM,0);
+ const P={z:[zW,cg(zW,zM)],r:[rW,cg(rW,rM)],t:[tW,cg(tW,tMo)],l:[lW,cg(lW,lM)]};
+ const cgok=p=>p[1]>=fwd(p[0])&&p[1]<=L.aft;
+ const chk=[
+  ["Ramp Weight",`${f1(rW)} / ${L.ramp} lbs`,rW<=L.ramp],
+  ["Take-off Weight",`${f1(tW)} / ${L.to} lbs`,tW<=L.to],
+  ["Landing Weight",`${f1(lW)} / ${L.ldg} lbs`,lW<=L.ldg],
+  ["Take-off C.G.",`${f2(P.t[1])} (ช่วง ${f2(fwd(tW))}–${L.aft})`,cgok(P.t)],
+  ["Landing C.G.",`${f2(P.l[1])} (ช่วง ${f2(fwd(lW))}–${L.aft})`,cgok(P.l)],
+  ["Zero Fuel C.G.",`${f2(P.z[1])} (ช่วง ${f2(fwd(zW))}–${L.aft})`,cgok(P.z)],
+  ["เชื้อเพลิงคงเหลือ",`${f1(fl-tx-used)} lbs`,fl-tx-used>=0]];
+ $("lm").innerHTML=chk.map(c=>`<div class="lim"><span>${c[0]}<br><small>${c[1]}</small></span>${st(c[2],c[2]?"ผ่าน":"เกินขีดจำกัด")}</div>`).join("");
+ const all=chk.every(c=>c[2]);
+ $("ov").className=all?"ok":"bad";$("ov").textContent=all?"✓ น้ำหนักและ C.G. อยู่ในขีดจำกัดทั้งหมด":"✗ มีรายการเกินขีดจำกัด — ตรวจสอบรายการสีแดงด้านล่าง";
+ draw(P);
+}
+function draw(P){
+ const X=x=>40+(x-175)/30*320,Y=y=>300-(y-4000)/5000*280,pt=a=>a.map(q=>X(q[0]).toFixed(1)+","+Y(q[1]).toFixed(1)).join(" ");
+ const fw85=fwd(8500);
+ let s=`<defs><pattern id="hz" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="var(--mu)" stroke-width="1"/></pattern></defs>`;
+ for(let x=175;x<=205;x++){const M=x%5===0;s+=`<line x1="${X(x)}" x2="${X(x)}" y1="20" y2="300" stroke="var(--bd)" stroke-width="${M?1:.4}"/>`;if(M)s+=`<text x="${X(x)}" y="315" font-size="9" fill="var(--mu)" text-anchor="middle">${x}</text>`}
+ for(let y=4000;y<=9000;y+=500)s+=`<line x1="40" x2="360" y1="${Y(y)}" y2="${Y(y)}" stroke="var(--bd)" stroke-width="${y%1000?.5:1}"/><text x="36" y="${Y(y)+3}" font-size="9" fill="var(--mu)" text-anchor="end">${y}</text>`;
+ s+=`<polygon points="${pt([[185,4000],[185,6500],[193.37,8000],[fw85,8500],[204.35,8500],[204.35,4000]])}" fill="var(--okb)"/>`;
+ s+=`<polygon points="${pt([[fw85,8500],[199.15,8807],[204.35,8807],[204.35,8500]])}" fill="var(--bd)"/>`;
+ s+=`<rect x="${X(203.06)}" y="${Y(8807)}" width="${X(204.35)-X(203.06)}" height="${Y(4000)-Y(8807)}" fill="url(#hz)" opacity=".7"/>`;
+ s+=`<polyline fill="none" stroke="var(--tx)" stroke-width="2" stroke-linejoin="round" points="${pt([[185,4000],[185,6500],[193.37,8000],[199.15,8807],[204.35,8807],[204.35,4000],[185,4000]])}"/>`;
+ s+=`<line x1="${X(fw85)}" x2="${X(204.35)}" y1="${Y(8500)}" y2="${Y(8500)}" stroke="var(--tx)" stroke-width="2"/>`;
+ s+=`<text x="${X(175)+4}" y="${Y(8807)-3}" font-size="8" fill="var(--mu)">Max Take-off 8807 lbs</text><text x="${X(175)+4}" y="${Y(8500)-3}" font-size="8" fill="var(--mu)">Max Landing 8500 lbs</text><text x="${X(190)}" y="${Y(5400)}" font-size="9" fill="var(--mu)" text-anchor="middle">Center of Gravity Limits</text>`;
+ s+=`<text x="200" y="12" font-size="9" fill="var(--mu)" text-anchor="middle">C.G. (inches aft of datum, FS 0.0)</text>`;
+ const pts=[["z","#8a94a3","ZFW"],["r","#0b5ed7","R"],["t","#e08a00","T/O"],["l","#13a37f","L"]];
+ s+=`<polyline fill="none" stroke="var(--mu)" stroke-width="1" stroke-dasharray="3 2" points="${pt(pts.map(p=>[P[p[0]][1],P[p[0]][0]]))}"/>`;
+ pts.forEach(p=>{const v=P[p[0]];s+=`<circle cx="${X(v[1])}" cy="${Y(v[0])}" r="5" fill="${p[1]}" stroke="var(--card)" stroke-width="1.5"/>`});
+ $("ch").innerHTML=s;
+}
+$("ms").onchange=build;acs.onchange=calc;["tx","fu","pph"].forEach(i=>$(i).oninput=calc);
+$("tot").onchange=()=>{const cur=n($("tx").value)+n($("fu").value)+FP.op+FP.res+FP.alt;$("fu").value=+Math.max(0,n($("fu").value)+n($("tot").value)-cur).toFixed(1);calc()};
+$("opm").onchange=()=>{ST.opM=n($("opm").value);ST.opL=null;calc()};
+$("opf").onchange=()=>{ST.opL=n($("opf").value);calc()};
+$("altm").onchange=()=>{ST.altM=n($("altm").value);ST.altL=null;calc()};
+$("alt").onchange=()=>{ST.altL=n($("alt").value);calc()};
+build();
+
+const PF={"cruise":[{"Dk":[40,60,80,100,120,140,160,180,200],"ws":[-60,-50,-40,-30,-20,-10,0,10,20,30,40,50,60],"curves":[[366.5,373.9,382.0,390.0,399.0,409.0,420.2,433.9,446.0,462.4,479.0,499.4,522.5],[441.0,451.0,462.0,474.1,487.5,501.8,517.8,534.0,555.0,577.8,602.0,631.4,664.0],[515.0,528.4,543.2,558.2,576.0,594.8,615.5,634.0,664.0,692.8,725.2,763.2,804.5],[590.0,605.9,623.5,643.1,664.0,686.9,713.0,734.0,773.0,808.4,845.5,894.5,947.0],[664.0,683.4,704.0,727.1,752.5,780.0,810.5,833.0,881.0,923.9,972.0,1026.5,1087.5],[738.5,760.8,785.0,810.6,840.5,872.8,907.8,946.9,991.0,1039.2,1094.5,1158.0,1228.5],[812.0,837.8,865.5,895.6,929.0,965.8,1005.5,1049.4,1099.5,1154.9,1218.5,1289.8,1371.5],[887.0,915.4,946.5,979.9,1018.0,1058.2,1102.5,1152.4,1208.0,1271.0,1341.0,null,null],[961.5,993.1,1027.0,1064.6,1106.5,1150.2,1200.0,1255.8,1316.5,1386.2,null,null,null]],"fuel":[{"alt":0,"a":316.814,"b":0.59613},{"alt":4000,"a":295.764,"b":0.53772},{"alt":8000,"a":281.468,"b":0.48734},{"alt":12000,"a":271.818,"b":0.43766},{"alt":16000,"a":265.682,"b":0.39466}],"time":[{"alt":0,"a":-14.421,"b":0.06458},{"alt":8000,"a":-10.14,"b":0.06353},{"alt":16000,"a":-6.919,"b":0.06471}],"xmax":1397,"corr":{"b":[9,0],"h":[6,0]}},{"Dk":[200,300,400,500,600,700,800,900,1000],"ws":[-60,-50,-40,-30,-20,-10,0,10,20,30,40,50,60],"curves":[[null,383.0,390.0,398.0,407.0,415.9,426.2,439.9,450.5,465.4,481.5,499.8,521.0],[450.0,460.0,470.5,482.2,495.0,508.8,523.8,540.0,559.0,581.2,604.0,631.8,663.5],[524.5,537.8,551.5,566.2,583.0,600.9,621.5,640.0,668.0,696.4,727.2,764.2,805.0],[600.0,615.0,632.0,651.0,672.0,693.4,718.5,740.0,777.0,812.6,850.5,895.8,945.5],[673.5,691.9,713.2,735.4,760.0,786.8,816.0,839.5,886.0,927.5,974.0,1027.8,1088.0],[748.5,769.9,793.2,818.9,848.0,878.9,913.8,951.8,994.5,1043.5,1096.5,1159.4,1229.5],[822.0,847.1,874.0,904.2,936.5,972.2,1011.5,1054.4,1102.5,1159.0,1220.5,1290.8,1370.5],[896.5,923.9,955.0,988.1,1025.0,1064.6,1109.5,1157.8,1213.0,1274.5,1344.0,null,null],[970.0,1002.1,1036.0,1072.8,1113.0,1157.1,1205.5,1260.1,1321.5,1389.5,null,null,null]],"fuel":[{"alt":0,"a":-241.999,"b":3.00198},{"alt":10000,"a":-161.69,"b":2.33234},{"alt":20000,"a":-71.055,"b":1.79342},{"alt":25000,"a":-28.553,"b":1.6122}],"time":[{"alt":0,"a":-70.49,"b":0.32193},{"alt":10000,"a":-70.49,"b":0.32193},{"alt":20000,"a":-67.672,"b":0.33428},{"alt":25000,"a":-72.858,"b":0.35584}],"xmax":1403,"corr":{"b":[11,4],"h":[7,3]}}],"range":[{"Dk":[40,60,80,100,120,140,160,180,200],"ws":[-60,-50,-40,-30,-20,-10,0,10,20,30,40,50,60],"curves":[[363.0,370.8,379.0,387.2,397.0,408.8,421.2,434.9,452.5,471.1,493.0,519.6,551.5],[434.5,444.0,456.2,470.0,484.5,500.0,518.8,535.0,563.5,591.8,624.0,662.8,708.5],[504.0,518.5,534.0,551.2,570.0,591.9,616.5,635.0,675.0,712.4,755.5,806.1,855.5],[575.0,592.4,611.5,632.8,657.0,683.8,713.5,736.5,788.0,846.6,886.2,948.9,1024.5],[645.0,666.4,689.0,715.1,744.0,775.2,811.5,840.0,898.5,953.2,1016.8,1091.5,1181.5],[716.0,739.8,766.8,796.2,830.0,867.1,908.5,956.8,1009.5,1074.4,1147.5,1235.5,1340.5],[786.5,813.9,844.5,878.8,916.0,959.2,1006.0,1059.9,1121.5,1195.4,1279.2,1377.4,null],[857.0,887.8,922.0,960.8,1003.5,1050.6,1104.2,1164.4,1233.5,1315.0,null,null,null],[927.5,962.1,1000.2,1041.5,1089.5,1142.4,1200.5,1268.8,1345.0,null,null,null,null]],"fuel":[{"alt":0,"a":213.606,"b":0.52857},{"alt":4000,"a":201.89,"b":0.47079},{"alt":8000,"a":205.709,"b":0.42617},{"alt":12000,"a":211.165,"b":0.38726},{"alt":16000,"a":224.661,"b":0.35696}],"time":[{"alt":0,"a":-17.91,"b":0.07955}],"xmax":1398,"corr":{"b":[5,2],"h":[5,2]}},{"Dk":[200,300,400,500,600,700,800,900,1000],"ws":[-60,-50,-40,-30,-20,-10,0,10,20,30,40,50,60],"curves":[[358.0,364.4,372.0,380.2,390.5,400.8,412.2,425.9,441.0,458.8,479.5,504.4,534.0],[428.0,439.0,450.0,462.1,477.0,492.0,509.8,526.0,552.0,579.4,610.0,647.2,691.0],[498.5,512.4,527.2,544.2,563.0,583.9,607.2,626.0,664.0,699.8,740.5,789.8,844.5],[569.5,586.8,606.0,626.2,650.0,674.9,704.5,727.1,776.0,821.1,null,null,null],[641.0,661.2,683.2,707.8,736.0,766.9,802.5,830.0,887.5,941.0,1002.5,1074.1,1160.5],[711.0,734.8,761.0,790.2,822.5,858.8,899.5,945.4,999.5,1061.1,1132.0,1216.6,1317.5],[781.5,809.1,838.5,872.1,909.0,950.2,997.0,1050.9,1111.5,1181.5,1262.8,1358.6,null],[852.5,882.6,916.5,954.4,996.0,1042.4,1095.2,1154.0,1223.5,1301.9,null,null,null],[922.5,957.2,994.5,1035.8,1082.5,1134.2,1191.5,1257.8,1333.0,null,null,null,null]],"fuel":[{"alt":0,"a":-237.865,"b":2.63719},{"alt":10000,"a":-138.5,"b":2.02387},{"alt":20000,"a":-44.943,"b":1.68227},{"alt":25000,"a":-2.14,"b":1.59373}],"time":[{"alt":0,"a":-68.87,"b":0.35853}],"xmax":1389,"corr":{"b":[2,5],"h":[2,3]}}]};
+function pfI(xs,ys,x){const n=xs.length;let i=0;if(x<xs[0])i=0;else if(x>xs[n-1])i=n-2;else{while(i<n-2&&x>xs[i+1])i++}const t=(x-xs[i])/(xs[i+1]-xs[i]);return[ys[i]+t*(ys[i+1]-ys[i]),x<xs[0]||x>xs[n-1]]}
+function pfCX(c,ws,w){const xs=[],ys=[];c.forEach((v,i)=>{if(v!=null){xs.push(ws[i]);ys.push(v)}});return pfI(xs,ys,w)}
+let pfLast=null;
+function pfCalc(){
+ const R=$("pfr"),D=n($("pfd").value);let w=n($("pfw").value)*($("pfs").value==="t"?-1:1),alt=n($("pfa").value);
+ if(!(D>0)){R.innerHTML="";pfLast=null;return}
+ const warn=[],S=PF[$("pfm").value][D<=200?0:1],Dk=S.Dk;
+ if(w>60||w<-60){w=Math.max(-60,Math.min(60,w));warn.push("ลมเกิน ±60 kt (นอกช่วงกราฟ) ใช้ค่า "+Math.abs(w)+" kt")}
+ let j=0;while(j<Dk.length-2&&D>Dk[j+1])j++;
+ const a=pfCX(S.curves[j],S.ws,w),b=pfCX(S.curves[j+1],S.ws,w),t=(D-Dk[j])/(Dk[j+1]-Dk[j]),x=a[0]+t*(b[0]-a[0]);
+ if(D<Dk[0])warn.push("ระยะทางน้อยกว่า "+Dk[0]+" NM (นอกช่วงกราฟ POH)");
+ if(D>1000)warn.push("ระยะทางเกิน 1,000 NM (นอกช่วงกราฟ POH)");
+ if(a[1]||b[1]||x>S.xmax)warn.push("ค่าลม/ระยะทางนี้อยู่นอกขอบเขตกราฟ POH ผลเป็นการประมาณ");
+ const x0=S.curves.map(c=>pfCX(c,S.ws,0)[0]),De=pfI(x0,Dk,x)[0];
+ const pick=L=>{if(L.length<2)return L[0].a+L[0].b*x;const al=L.map(l=>l.alt),v=L.map(l=>l.a+l.b*x),c=Math.max(al[0],Math.min(al[al.length-1],alt));if(c!==alt)warn.push("ระดับบินอยู่นอกช่วงกราฟ ใช้ "+c.toLocaleString("en-US")+" ft");return pfI(al,v,c)[0]};
+ let fuel=pick(S.fuel),tm=pick(S.time);
+ const o=$("pfo").value;if(o!=="n"){const q=S.corr[o];tm*=1+q[0]/100;fuel*=1+q[1]/100}
+ const uniq=[...new Set(warn)];
+ pfLast={fuel:Math.round(fuel),tm:Math.round(tm)};
+ const hh=Math.floor(pfLast.tm/60),mm=pfLast.tm%60;
+ R.innerHTML=`<div class="lim"><span>ระยะเทียบลมสงบ (still-air)</span><b>${Math.round(De)} NM</b></div><div class="lim"><span>Fuel required</span><b>${pfLast.fuel.toLocaleString("en-US")} lbs</b></div><div class="lim"><span>Time required</span><b>${hh} ชม. ${mm} นาที <span style="color:var(--mu);font-weight:400">(${pfLast.tm} นาที)</span></b></div><div class="lim"><span>Ground speed เฉลี่ย</span><b>${Math.round(D/(fuel&&tm?tm/60:1))} kt</b></div>`+(uniq.length?`<div class="note" style="color:var(--bad)">⚠ ${uniq.join(" · ")}</div>`:"")+`<div style="margin-top:8px"><button id="pfu" style="font:inherit;font-weight:600;color:#fff;background:var(--ac);border:0;border-radius:8px;padding:7px 12px;cursor:pointer">ใช้เป็น Trip fuel</button><div class="note" style="margin:4px 0 0">Trip fuel = Fuel required − Taxi fuel − Final reserve 45 นาที (เพราะกราฟรวมสองรายการนี้แล้ว)</div></div>`;
+ $("pfu").onclick=()=>{const res=n($("pph").value)*45/60;$("fu").value=Math.max(0,Math.round(pfLast.fuel-n($("tx").value)-res));calc()};
+}
+["pfm","pfd","pfs","pfw","pfa","pfo"].forEach(i=>{$(i).oninput=pfCalc;$(i).onchange=pfCalc});
+pfCalc();
+
+const CR={"2000":{"46":[[[1422,402,163],[1415,401,163]],[[1563,407,165],[1475,393,161]],[[1686,411,164],[1520,385,156]]],"40":[[[1590,427,171],[1400,396,161]],[[1743,431,172],[1455,387,159]],[[1862,436,170],[1520,381,156]]],"30":[[[1854,464,181],[1700,439,174],[1500,407,165],[1385,389,159]],[[2020,468,181],[1900,450,177],[1700,419,169],[1445,381,157]],[[2118,471,178],[2000,451,174],[1800,419,166],[1510,374,154]]],"20":[[[1954,476,183],[1800,450,177],[1600,418,168],[1405,387,158]],[[2123,480,183],[2000,460,178],[1800,429,171],[1600,400,163],[1440,376,155]],[[2321,502,183],[2200,479,179],[2000,443,172],[1800,412,165],[1525,370,153]]],"10":[[[1919,465,180],[1800,445,175],[1600,414,166],[1395,381,156]],[[2083,467,180],[1900,439,173],[1700,409,165],[1435,370,153]],[[2284,485,180],[2100,451,174],[1900,419,167],[1500,362,150]]],"0":[[[1887,454,177],[1700,424,169],[1500,393,159],[1415,380,156]],[[2044,456,177],[1900,434,171],[1700,404,163],[1500,375,155],[1415,362,151]],[[2243,468,177],[2100,443,172],[1900,414,165],[1700,385,157],[1485,355,148]]],"-10":[[[1855,444,173],[1700,419,167],[1500,389,158],[1435,379,155]],[[2006,445,173],[1900,428,169],[1700,400,162],[1395,355,148]],[[2201,453,173],[2000,423,167],[1800,394,159],[1445,345,145]]],"-20":[[[1826,434,170],[1700,414,165],[1500,384,156],[1440,375,153]],[[1969,434,170],[1800,409,164],[1600,380,156],[1390,350,146]],[[2157,440,170],[2000,416,165],[1800,389,158],[1460,343,144]]],"-30":[[[1794,425,167],[1600,395,158],[1475,376,152]],[[1931,423,167],[1800,404,161],[1600,375,154],[1400,347,145]],[[2114,427,167],[2000,410,163],[1800,383,156],[1445,336,142]]],"-40":[[[1767,416,163],[1600,390,156],[1515,378,152]],[[1894,413,163],[1700,385,156],[1500,357,147],[1420,345,144]],[[2069,415,163],[1900,392,157],[1700,365,150],[1430,329,139]]],"-50":[[[1737,406,160],[1600,385,154],[1535,376,151]],[[1857,402,160],[1700,380,153],[1500,352,145],[1445,344,143]],[[2023,403,160],[1900,386,155],[1700,360,148],[1395,320,136]]],"-54":[[[1725,403,158],[1600,383,153],[1545,375,150]],[[1843,398,158],[1700,378,153],[1435,341,141]],[[2005,399,158],[1800,371,151],[1400,320,135]]]},"4000":{"42":[[[1418,389,166],[1360,379,163]],[[1557,393,168],[1410,371,160]],[[1669,397,166],[1445,362,155]]],"40":[[[1473,397,169],[1345,376,162]],[[1616,401,170],[1405,369,159]],[[1726,406,168],[1440,360,155]]],"30":[[[1735,434,180],[1600,413,174],[1400,381,163],[1360,374,161]],[[1889,438,180],[1700,409,172],[1500,379,163],[1405,365,158]],[[1974,444,177],[1800,411,170],[1600,379,161],[1440,355,153]]],"20":[[[1928,463,186],[1800,440,181],[1600,408,172],[1400,376,162],[1370,371,160]],[[2079,465,185],[1900,435,179],[1700,404,171],[1500,374,161],[1400,359,156]],[[2153,467,181],[2000,438,176],[1800,404,168],[1600,373,160],[1430,348,152]]],"10":[[[1986,468,186],[1800,436,179],[1600,403,170],[1370,367,159]],[[2158,472,186],[2000,446,181],[1600,385,164],[1390,354,154]],[[2344,499,186],[2200,468,181],[1800,397,167],[1435,344,150]]],"0":[[[1948,456,183],[1800,431,177],[1600,399,168],[1375,363,157]],[[2115,460,183],[2000,441,179],[1600,380,163],[1380,347,152]],[[2321,482,183],[2200,458,179],[1800,390,165],[1430,338,149]]],"-10":[[[1915,446,180],[1800,427,175],[1600,394,166],[1380,360,155]],[[2076,448,180],[1900,420,173],[1500,361,156],[1360,340,149]],[[2278,463,180],[2100,432,174],[1700,371,159],[1415,332,147]]],"-20":[[[1881,436,176],[1700,405,169],[1500,374,160],[1385,357,154]],[[2036,437,176],[1900,415,171],[1700,385,163],[1500,356,155],[1370,337,148]],[[2233,447,176],[2100,425,172],[1900,394,165],[1700,366,157],[1410,326,145]]],"-30":[[[1847,425,173],[1700,401,166],[1500,370,157],[1400,355,153]],[[1995,425,173],[1800,395,165],[1600,366,157],[1375,334,147]],[[2188,432,173],[2000,403,166],[1600,347,152],[1395,321,142]]],"-40":[[[1816,416,169],[1700,397,164],[1500,365,155],[1430,355,152]],[[1954,414,169],[1800,390,163],[1600,361,155],[1395,332,146]],[[2141,418,169],[2000,398,164],[1800,369,158],[1405,317,141]]],"-50":[[[1783,406,165],[1600,376,158],[1465,356,151]],[[1915,404,165],[1600,357,153],[1385,327,143]],[[2093,406,165],[1700,351,152],[1375,309,138]]],"-54":[[[1772,402,164],[1600,375,157],[1475,356,151]],[[1899,399,164],[1700,369,156],[1385,325,143]],[[2075,402,164],[1700,350,151],[1365,306,137]]]},"6000":{"38":[[[1407,376,169],[1365,368,167]],[[1542,380,170],[1395,357,162]],[[1642,383,168],[1400,345,155]]],"30":[[[1605,404,178],[1500,387,173],[1340,361,164]],[[1746,408,178],[1600,385,172],[1405,355,161]],[[1826,410,175],[1700,388,169],[1415,343,155]]],"20":[[[1784,431,184],[1600,399,176],[1400,367,166],[1330,356,162]],[[1923,433,184],[1800,412,179],[1600,380,170],[1395,349,159]],[[1990,434,180],[1800,397,172],[1600,365,163],[1400,335,153]]],"10":[[[1980,460,190],[1800,429,183],[1600,394,174],[1330,351,160]],[[2123,462,189],[2000,440,185],[1600,376,168],[1385,344,158]],[[2167,463,184],[2000,429,178],[1600,359,161],[1425,333,153]]],"0":[[[2017,462,190],[1900,444,185],[1700,407,177],[1500,374,167],[1330,347,158]],[[2193,468,190],[2000,435,183],[1800,402,175],[1600,371,167],[1370,337,155]],[[2352,495,188],[2200,460,183],[2000,420,176],[1600,354,160],[1415,328,151]]],"-10":[[[1976,450,186],[1800,419,179],[1600,386,170],[1400,354,160],[1335,344,157]],[[2150,454,186],[2000,430,181],[1800,398,173],[1600,367,165],[1375,333,154]],[[2355,484,186],[2200,449,181],[2000,411,174],[1800,378,167],[1415,323,150]]],"-20":[[[1939,439,183],[1800,415,177],[1600,382,168],[1400,350,158],[1340,341,155]],[[2107,442,183],[2000,425,179],[1800,393,171],[1600,362,163],[1340,324,150]],[[2311,461,183],[2200,440,179],[2000,405,172],[1800,373,165],[1400,317,147]]],"-30":[[[1907,429,179],[1800,411,175],[1600,377,166],[1340,337,153]],[[2065,430,179],[1900,404,173],[1700,373,165],[1350,322,149]],[[2264,443,179],[2100,415,174],[1700,353,159],[1395,312,145]]],"-40":[[[1873,418,175],[1700,390,168],[1500,357,159],[1345,334,151]],[[2021,419,175],[1900,400,171],[1700,369,163],[1350,317,147]],[[2218,427,175],[2100,408,172],[1700,348,157],[1380,306,143]]],"-50":[[[1840,409,172],[1700,386,166],[1500,353,157],[1390,336,152]],[[1977,407,172],[1800,380,165],[1600,349,157],[1340,312,144]],[[2169,412,172],[2000,387,166],[1600,331,151],[1380,302,142]]],"-54":[[[1826,404,170],[1700,384,165],[1500,352,156],[1400,336,151]],[[1960,403,170],[1800,378,164],[1600,348,156],[1340,311,144]],[[2148,407,170],[2000,385,165],[1600,329,150],[1380,300,141]]]},"8000":{"34":[[[1373,360,170],[1345,356,168]],[[1500,364,171],[1385,346,164]],[[1590,367,168],[1415,338,158]]],"30":[[[1467,374,175],[1345,354,168]],[[1600,377,175],[1395,346,164]],[[1676,379,172],[1425,337,158]]],"20":[[[1647,400,182],[1500,375,175],[1320,346,165]],[[1776,403,182],[1600,372,174],[1385,340,162]],[[1836,404,177],[1700,377,171],[1410,329,156]]],"10":[[[1820,426,188],[1700,405,183],[1500,370,173],[1315,341,163]],[[1952,428,187],[1800,401,181],[1600,368,172],[1370,333,160]],[[1993,429,182],[1800,389,174],[1600,353,165],[1435,327,156]]],"0":[[[2020,457,194],[1900,436,190],[1700,401,181],[1500,366,171],[1310,336,161]],[[2152,459,193],[2000,430,187],[1800,396,179],[1600,364,170],[1370,329,158]],[[2165,459,187],[2000,421,180],[1800,382,172],[1600,348,163],[1425,321,155]]],"-10":[[[2049,457,193],[1900,431,187],[1700,397,179],[1500,363,170],[1305,331,159]],[[2229,465,193],[2100,442,189],[1900,408,181],[1700,376,173],[1350,322,156]],[[2327,490,190],[2200,457,186],[2000,411,178],[1600,344,162],[1395,313,152]]],"-20":[[[2006,445,190],[1900,427,185],[1700,392,177],[1500,359,168],[1310,329,157]],[[2183,451,190],[2000,420,183],[1800,387,175],[1600,356,167],[1340,317,154]],[[2381,491,190],[2200,445,184],[2000,404,176],[1800,369,169],[1400,309,150]]],"-30":[[[1969,434,186],[1800,405,179],[1600,371,170],[1400,338,160],[1305,324,155]],[[2138,438,186],[2000,415,181],[1800,383,173],[1600,352,165],[1320,310,151]],[[2340,465,186],[2200,434,181],[2000,397,174],[1600,333,158],[1390,304,148]]],"-40":[[[1935,424,182],[1800,401,176],[1600,367,168],[1400,335,158],[1305,320,153]],[[2093,425,182],[1900,395,175],[1700,363,167],[1500,332,158],[1315,305,149]],[[2292,443,182],[2100,406,176],[1900,373,169],[1700,343,161],[1370,297,146]]],"-50":[[[1901,413,178],[1700,380,170],[1500,347,161],[1315,317,151]],[[2046,413,178],[1900,390,173],[1700,359,165],[1310,301,146]],[[2245,423,178],[2100,398,173],[1700,339,159],[1365,292,144]]],"-54":[[[1889,410,176],[1700,378,169],[1500,346,160],[1320,317,151]],[[2028,408,176],[1900,388,172],[1700,357,164],[1320,301,146]],[[2226,416,176],[2100,396,172],[1700,337,158],[1355,290,143]]]},"10000":{"30":[[[1337,345,171],[1325,343,170]],[[1460,348,171],[1390,337,167]],[[1535,351,168],[1415,330,161]]],"20":[[[1519,372,180],[1400,351,173],[1315,337,168]],[[1636,374,179],[1500,350,172],[1370,330,165]],[[1691,375,175],[1500,338,165],[1405,322,159]]],"10":[[[1667,394,186],[1500,365,177],[1310,332,166]],[[1789,396,185],[1600,363,176],[1365,325,163]],[[1829,397,179],[1700,370,173],[1400,316,158]]],"0":[[[1855,423,192],[1700,396,185],[1500,361,175],[1300,327,164]],[[1976,424,191],[1800,392,183],[1600,359,174],[1355,319,161]],[[1991,425,184],[1800,382,176],[1600,344,167],[1420,314,157]]],"-10":[[[2040,453,198],[1900,427,192],[1700,391,183],[1500,357,173],[1285,320,161]],[[2155,454,195],[2000,422,189],[1800,387,181],[1600,355,172],[1330,312,158]],[[2140,454,188],[2000,417,183],[1800,374,174],[1600,339,165],[1405,308,155]]],"-20":[[[2078,455,197],[1900,422,190],[1700,387,181],[1500,353,172],[1270,314,158]],[[2261,466,197],[2100,435,191],[1900,400,183],[1700,367,175],[1320,307,156]],[[2282,479,191],[2100,431,184],[1900,385,177],[1700,350,168],[1395,302,153]]],"-30":[[[2040,443,193],[1900,418,187],[1700,383,179],[1500,349,170],[1275,312,157]],[[2216,450,193],[2100,430,189],[1900,395,181],[1700,362,173],[1315,302,154]],[[2397,491,193],[2200,444,186],[2000,398,178],[1600,329,162],[1390,297,151]]],"-40":[[[2004,432,189],[1800,396,181],[1600,362,172],[1400,329,162],[1270,307,154]],[[2166,436,189],[2000,407,183],[1800,374,175],[1600,342,167],[1310,297,152]],[[2364,467,189],[2200,431,183],[2000,389,176],[1600,324,160],[1360,289,148]]],"-50":[[[1966,421,185],[1800,392,178],[1600,358,170],[1400,325,160],[1260,302,152]],[[2118,423,185],[2000,402,181],[1800,370,173],[1600,339,164],[1285,290,148]],[[2317,443,185],[2200,420,181],[2000,381,174],[1600,319,158],[1340,283,146]]],"-54":[[[1955,417,183],[1800,390,177],[1600,357,169],[1400,324,159],[1250,299,150]],[[2098,418,183],[1900,384,176],[1700,352,168],[1500,321,159],[1280,288,147]],[[2298,434,183],[2100,396,177],[1900,363,169],[1700,333,162],[1330,280,144]]]}},MT={"1000":{"temps":[50,45,40,35,30,25,20,15,10,5,0,-5,-10,-15,-20,-25,-30,-35,-40,-45,-50,-54],"tq":[[1373,1514,1643],[1503,1651,1778],[1651,1810,1933],[1787,1952,2070],[1917,2089,2195],[1941,2105,2299],[1924,2085,2284],[1907,2065,2266],[1890,2048,2246],[1875,2030,2227],[1859,2011,2205],[1845,1992,2184],[1830,1973,2163],[1815,1955,2141],[1800,1937,2120],[1786,1919,2099],[1772,1902,2078],[1758,1884,2056],[1742,1865,2034],[1728,1848,2012],[1716,1831,1990],[1705,1817,1971]]},"2000":{"temps":[50,45,40,35,30,25,20,15,10,5,0,-5,-10,-15,-20,-25,-30,-35,-40,-45,-50,-54],"tq":[[1322,1457,1582],[1447,1590,1712],[1590,1743,1862],[1729,1888,2001],[1854,2020,2118],[1970,2127,2214],[1954,2123,2321],[1937,2104,2304],[1919,2083,2284],[1903,2063,2265],[1887,2044,2243],[1871,2025,2223],[1855,2006,2201],[1840,1986,2180],[1826,1969,2157],[1809,1950,2135],[1794,1931,2114],[1781,1912,2092],[1767,1894,2069],[1752,1874,2046],[1737,1857,2023],[1725,1843,2005]]},"3000":{"temps":[50,45,40,35,30,25,20,15,10,5,0,-5,-10,-15,-20,-25,-30,-35,-40,-45,-50,-54],"tq":[[1272,1403,1522],[1393,1531,1648],[1531,1679,1793],[1669,1823,1931],[1793,1953,2044],[1900,2051,2133],[1990,2159,2234],[1971,2140,2338],[1952,2119,2324],[1934,2100,2301],[1918,2080,2282],[1902,2061,2261],[1885,2041,2241],[1868,2022,2218],[1852,2002,2196],[1837,1982,2173],[1821,1963,2149],[1806,1943,2128],[1790,1924,2104],[1776,1906,2081],[1761,1886,2058],[1749,1870,2039]]},"4000":{"temps":[45,40,35,30,25,20,15,10,5,0,-5,-10,-15,-20,-25,-30,-35,-40,-45,-50,-54],"tq":[[1340,1473,1586],[1473,1616,1726],[1607,1755,1859],[1735,1889,1974],[1834,1980,2059],[1928,2079,2153],[2007,2180,2252],[1986,2158,2344],[1967,2135,2342],[1948,2115,2321],[1930,2095,2299],[1915,2076,2278],[1898,2056,2256],[1881,2036,2233],[1864,2015,2211],[1847,1995,2188],[1833,1974,2163],[1816,1954,2141],[1799,1934,2117],[1783,1915,2093],[1772,1899,2075]]},"5000":{"temps":[45,40,35,30,25,20,15,10,5,0,-5,-10,-15,-20,-25,-30,-35,-40,-45,-50,-54],"tq":[[1289,1416,1526],[1417,1554,1660],[1546,1688,1789],[1679,1825,1906],[1771,1911,1986],[1856,2000,2070],[1958,2107,2165],[2022,2199,2257],[2002,2176,2352],[1981,2154,2359],[1962,2134,2338],[1945,2112,2317],[1927,2092,2295],[1910,2072,2272],[1893,2051,2249],[1877,2030,2226],[1860,2009,2204],[1845,1988,2179],[1829,1966,2154],[1811,1946,2130],[1796,1929,2110]]},"6000":{"temps":[45,40,35,30,25,20,15,10,5,0,-5,-10,-15,-20,-25,-30,-35,-40,-45,-50,-54],"tq":[[1235,1357,1462],[1356,1493,1591],[1479,1616,1713],[1605,1746,1826],[1703,1837,1909],[1784,1923,1990],[1879,2025,2077],[1980,2123,2167],[2037,2216,2258],[2017,2193,2352],[1996,2171,2375],[1976,2150,2355],[1958,2129,2333],[1939,2107,2311],[1923,2086,2288],[1907,2065,2264],[1891,2043,2241],[1873,2021,2218],[1856,1999,2193],[1840,1977,2169],[1826,1960,2148]]},"7000":{"temps":[40,35,30,25,20,15,10,5,0,-5,-10,-15,-20,-25,-30,-35,-40,-45,-50,-54],"tq":[[1299,1425,1523],[1415,1547,1641],[1535,1677,1749],[1636,1766,1834],[1715,1848,1912],[1801,1938,1992],[1899,2036,2079],[2000,2138,2167],[2054,2234,2257],[2032,2212,2343],[2013,2188,2390],[1991,2167,2368],[1971,2145,2347],[1953,2123,2326],[1936,2101,2302],[1920,2079,2279],[1904,2057,2255],[1887,2034,2232],[1870,2012,2207],[1856,1994,2186]]},"8000":{"temps":[40,35,30,25,20,15,10,5,0,-5,-10,-15,-20,-25,-30,-35,-40,-45,-50,-54],"tq":[[1243,1365,1459],[1355,1482,1572],[1467,1600,1676],[1569,1694,1759],[1647,1776,1836],[1727,1859,1911],[1820,1952,1993],[1918,2050,2079],[2020,2152,2165],[2070,2251,2248],[2049,2229,2327],[2027,2205,2397],[2006,2183,2381],[1987,2160,2361],[1969,2138,2340],[1953,2115,2317],[1935,2093,2292],[1918,2070,2268],[1901,2046,2245],[1889,2028,2226]]},"9000":{"temps":[40,35,30,25,20,15,10,5,0,-5,-10,-15,-20,-25,-30,-35,-40,-45,-50,-54],"tq":[[1191,1308,1398],[1298,1419,1506],[1404,1531,1605],[1502,1621,1685],[1582,1705,1763],[1658,1785,1835],[1742,1870,1910],[1837,1965,1993],[1936,2064,2077],[2034,2159,2157],[2086,2248,2232],[2064,2245,2306],[2042,2222,2383],[2021,2200,2392],[2005,2176,2371],[1987,2152,2350],[1969,2129,2331],[1951,2105,2305],[1932,2082,2280],[1921,2063,2261]]},"10000":{"temps":[30,25,20,15,10,5,0,-5,-10,-15,-20,-25,-30,-35,-40,-45,-50,-54],"tq":[[1342,1465,1538],[1437,1552,1613],[1519,1636,1691],[1592,1713,1761],[1667,1789,1829],[1759,1881,1909],[1855,1976,1991],[1950,2070,2068],[2040,2155,2140],[2102,2240,2210],[2078,2261,2282],[2059,2238,2380],[2040,2216,2397],[2022,2192,2386],[2004,2166,2364],[1985,2143,2343],[1966,2118,2317],[1955,2098,2298]]},"11000":{"temps":[30,25,20,15,10,5,0,-5,-10,-15,-20,-25,-30,-35,-40,-45,-50,-54],"tq":[[1276,1393,1467],[1370,1480,1539],[1448,1561,1615],[1523,1639,1685],[1595,1712,1750],[1677,1795,1823],[1768,1886,1901],[1861,1976,1977],[1948,2059,2046],[2035,2143,2114],[2117,2223,2184],[2097,2276,2274],[2077,2254,2359],[2058,2229,2397],[2040,2205,2397],[2021,2181,2377],[2002,2156,2353],[1991,2136,2335]]},"12000":{"temps":[30,25,20,15,10,5,0,-5,-10,-15,-20,-25,-30,-35,-40,-45,-50,-54],"tq":[[1211,1323,1400],[1305,1410,1468],[1380,1488,1540],[1456,1567,1612],[1525,1637,1674],[1596,1712,1740],[1684,1798,1816],[1773,1883,1888],[1859,1966,1956],[1941,2046,2022],[2022,2124,2088],[2109,2208,2171],[2117,2285,2255],[2096,2268,2338],[2076,2243,2396],[2057,2219,2396],[2040,2193,2390],[2027,2173,2369]]}};
+const CR0=JSON.parse(JSON.stringify(CR)),MT0=JSON.parse(JSON.stringify(MT)),CRA=[2000,4000,6000,8000,10000];
+const ax=(arr,x)=>{const m=arr.length;if(m<2)return[0,0,0];let i=0;if(x<=arr[0])i=0;else if(x>=arr[m-1])i=m-2;else while(x>arr[i+1])i++;return[i,i+1,(x-arr[i])/((arr[i+1]-arr[i])||1)]};
+const bl=(a,b,t)=>a.map((v,j)=>v+t*(b[j]-v)),mix=(t,fa,fb)=>t<1e-9?fa():t>1-1e-9?fb():bl(fa(),fb(),t);
+const crW=new Set();let crLast=[0,0,0];
+function crGroup(rows,key,val){const R=rows.slice().sort((a,b)=>a[key]-b[key]);if(val<R[0][key]||val>R[R.length-1][key])crW.add("ค่า Torque/KTAS อยู่นอกช่วงของตาราง POH ผลเป็นการต่อเส้นตรงโดยประมาณ");const [i,j,t]=ax(R.map(r=>r[key]),val);return bl(R[i],R[j],t)}
+function crAlt(alt,T,r,key,val){const D=CR[alt],ts=Object.keys(D).map(Number).sort((a,b)=>a-b);if(T<ts[0]||T>ts[ts.length-1])crW.add("OAT อยู่นอกช่วงของตารางที่ระดับความสูงนี้ ใช้ค่าขอบตาราง");const Tc=Math.min(Math.max(T,ts[0]),ts[ts.length-1]),[i,j,t]=ax(ts,Tc);return mix(t,()=>crGroup(D[ts[i]][r],key,val),()=>crGroup(D[ts[j]][r],key,val))}
+function mtq(A,T,r){const al=Object.keys(MT).map(Number).sort((a,b)=>a-b),Ac=Math.min(Math.max(A,al[0]),al[al.length-1]),[i,j,t]=ax(al,Ac);const f=a=>{const M=MT[a],idx=M.temps.map((x,k)=>k).sort((p,q)=>M.temps[p]-M.temps[q]),xs=idx.map(k=>M.temps[k]),ys=idx.map(k=>M.tq[k][r]);const Tc=Math.min(Math.max(T,xs[0]),xs[xs.length-1]),[a0,a1,u]=ax(xs,Tc);return ys[a0]+u*(ys[a1]-ys[a0])};return f(al[i])+t*(f(al[j])-f(al[i]))}
+function crCalc(){
+ const A=n($("cpa").value),T=n($("cot").value),r=$("crp").selectedIndex,key=+$("ck").value,val=n($("cv").value);
+ crW.clear();const Ac=Math.min(Math.max(A,2000),10000);
+ if(A!==Ac)crW.add("ระดับความสูงอยู่นอกช่วงตาราง Cruise (2,000–10,000 ft) ใช้ค่าขอบตาราง");
+ const [i,j,t]=ax(CRA,Ac),v=mix(t,()=>crAlt(CRA[i],T,r,key,val),()=>crAlt(CRA[j],T,r,key,val)),mx=mtq(A,T,r),over=v[0]>mx+0.5;
+ crLast=v;const w=[...crW];
+ $("crr").innerHTML=`<div class="lim"><span>Torque</span><b>${Math.round(v[0])} ft-lb</b></div><div class="lim"><span>Fuel flow</span><b>${Math.round(v[1])} lbs/ชม.</b></div><div class="lim"><span>KTAS</span><b>${Math.round(v[2])} kt</b></div><div class="lim"><span>Max cruise torque<br><small>Fig 5-37</small></span><span>${Math.round(mx)} ft-lb ${st(!over,over?"เกินขีดจำกัด":"ผ่าน")}</span></div>`+(w.length?`<div class="note" style="color:var(--bad)">⚠ ${w.join(" · ")}</div>`:"")+`<div style="margin-top:8px"><button class="b" id="cpu">ใช้ ${Math.round(v[1])} lbs/ชม. เป็นอัตราสิ้นเปลือง</button></div>`;
+ $("cpu").onclick=()=>{$("pph").value=Math.round(v[1]);calc()};
+}
+function renderCr(){
+ const a=+$("cra").value,D=CR[a],ts=Object.keys(D).map(Number).sort((x,y)=>y-x);
+ let h='<tr><th rowspan="2">°C</th>'+[1900,1750,1600].map(r=>`<th colspan="3" class="bk">${r} RPM</th>`).join("")+'</tr><tr>'+'<th class="bk">Tq</th><th>FF</th><th>KTAS</th>'.repeat(3)+'</tr>';
+ ts.forEach(t=>{const bk=D[t],nr=Math.max(...bk.map(b=>b.length));for(let r=0;r<nr;r++){h+=`<tr${r===0?' class="gt"':""}>`+(r===0?`<td rowspan="${nr}" class="tc">${t}</td>`:"")+[0,1,2].map(b=>{const row=bk[b][r];return row?[0,1,2].map(k=>`<td${k===0?' class="bk"':""}>${row[k]}</td>`).join(""):'<td class="bk"></td><td></td><td></td>'}).join("")+"</tr>"}});
+ $("crt").innerHTML=h;
+}
+function renderMt(){
+ const a=+$("mta").value,M=MT[a];let h='<tr><th>°C</th><th>1900</th><th>1750</th><th>1600</th></tr>';
+ M.temps.forEach((t,k)=>{h+=`<tr><td class="tc">${t}</td>`+[0,1,2].map(r=>`<td>${M.tq[k][r]}</td>`).join("")+"</tr>"});
+ $("mtt").innerHTML=h;
+}
+CRA.forEach(a=>$("cra").add(new Option(a.toLocaleString("en-US")+" ft",a)));$("cra").value=8000;
+Object.keys(MT).forEach(a=>$("mta").add(new Option(Number(a).toLocaleString("en-US")+" ft",a)));$("mta").value=8000;
+$("cra").onchange=renderCr;$("mta").onchange=renderMt;
+["cpa","cot","crp","cv"].forEach(i=>{$(i).oninput=crCalc;$(i).onchange=crCalc});
+$("cotn").onclick=e=>{e.preventDefault();$("cot").value=+(n($("cot").value)*-1||0);crCalc();$("cot").focus()};
+$("ck").onchange=()=>{const key=+$("ck").value;$("cvl").textContent=key===0?"Torque (ft-lb)":"KTAS (kt)";$("cv").value=Math.round(crLast[key]);$("cv").step=key===0?10:1;crCalc()};
+renderCr();renderMt();crCalc();
+$("cpa").oninput=$("cpa").onchange=()=>{$("pfa").value=$("cpa").value;crCalc();pfCalc()};
+$("pfa").oninput=$("pfa").onchange=()=>{$("cpa").value=$("pfa").value;crCalc();pfCalc()};
+$("pfa").value=$("cpa").value;
+</script>
+</body>
+</html>
